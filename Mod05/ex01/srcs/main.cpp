@@ -1,21 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: matnam <matnam@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/19 16:03:10 by mcombeau          #+#    #+#             */
-/*   Updated: 2023/11/20 13:34:14 by matnam           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "Bureaucrat.hpp"
 #include "Form.hpp"
 #include <iostream>
-
-#define RESET	"\e[0m"
-#define RED		"\e[31m"
 
 void	createTestForm(std::string name, int gradeToSign, int gradeToExecute)
 {
@@ -28,8 +13,7 @@ void	createTestForm(std::string name, int gradeToSign, int gradeToExecute)
 		std::cout << form << " successfully created." << std::endl;
 		return ;
 	}
-	catch(std::exception const & e)
-	{
+	catch(std::exception const & e) {
 		std::cerr << "Exception: " << e.what()  << std::endl;
 	}
 }

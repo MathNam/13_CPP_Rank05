@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Bureaucrat.cpp                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: matnam <matnam@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/19 16:02:50 by mcombeau          #+#    #+#             */
-/*   Updated: 2023/11/20 13:28:22 by matnam           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "Bureaucrat.hpp"
 #include <iostream>
 
@@ -46,7 +34,7 @@ Bureaucrat::~Bureaucrat(void)
 	return ;
 }
 
-Bureaucrat &	Bureaucrat::operator=(Bureaucrat const & src)
+Bureaucrat&	Bureaucrat::operator=(Bureaucrat const & src)
 {
 	std::cout << "Bureaucrat assignment operator overload called." << std::endl;
 	this->_grade = src._grade;
@@ -109,17 +97,17 @@ void	Bureaucrat::signForm(Form& form) const
 	}
 }
 
-const char *	Bureaucrat::GradeTooHighException::what(void) const throw()
+const char*	Bureaucrat::GradeTooHighException::what(void) const throw()
 {
 	return ("Bureaucrat cannot outrank CEO: grade too low.");	
 }
 
-const char *	Bureaucrat::GradeTooLowException::what(void) const throw()
+const char*	Bureaucrat::GradeTooLowException::what(void) const throw()
 {
 	return ("Bureaucrat cannot sink to an intern's level: grade too high.");
 }
 
-std::ostream &	operator<<(std::ostream & os, Bureaucrat const & obj)
+std::ostream&	operator<<(std::ostream & os, Bureaucrat const & obj)
 {
 	os << "Bureaucrat \"" << obj.getName()
 		<< "\" (grade: " << obj.getGrade() << ")";

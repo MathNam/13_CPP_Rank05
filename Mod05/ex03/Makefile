@@ -4,7 +4,7 @@
 
 # Name
 
-PROJECT_NAME = intern
+PROJECT_NAME = form
 NAME	= ./$(PROJECT_NAME)
 
 #______________________________________________________________________________#
@@ -63,7 +63,8 @@ INC += -I $(INC_DIR)
 ############################### Headers ########################################
 #‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾#
 
-HEADER += Bureaucrat.hpp
+HEADER +=	Bureaucrat.hpp\
+			Form.hpp
 
 vpath %.h $(INC_DIR)
 
@@ -77,7 +78,8 @@ SRCS_DIR += ./srcs
 ############################### Sources ########################################
 #‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾#
 
-SRCS += Bureaucrat.cpp\
+SRCS +=	Bureaucrat.cpp\
+		Form.cpp\
 		main.cpp
 
 #______________________________________________________________________________#
@@ -98,8 +100,9 @@ CHK_OBJS = $(patsubst %.cpp, $(OBJS_DIR)/%.o, $(CHK_SRCS))
 ############################### Build ##########################################
 #‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾#
 
-DEPS_DIR = ./build
-DEPS = $(addprefix $(BUILD_DIR)/, $(notdir $(OBJS:.o=.d)))
+DEPS_DIR = $(OBJS_DIR)/.deps
+DEPS = $(SRCS:%.cpp=$(DEPS_DIR)/%.d)
+DFLAGS = -MT $@ -MMD -MP
 
 #______________________________________________________________________________#
 ############################### Progress Bar ###################################
@@ -138,29 +141,24 @@ $(NAME):	$(OBJS)
     	#-----Output-----#
 		@echo "$(WHITE)\n▶$(BGREEN)$(NAME)\t$(GREEN)Executable created$(NC)"
 
-$(OBJS): 	$(OBJS_DIR)/%.o: %.cpp | dir where
-			@$(CXX) $(CXXFLAGS) -MMD $(INC) -c $< -o $@
-			@mv $(basename $@).d $(DEPS_DIR)/$(notdir $(basename $@)).d
+-include $(DEPS)
+
+$(OBJS):	$(OBJS_DIR)/%.o: %.cpp | dir where
+			@$(CXX) $(DFLAGS) $(CXXFLAGS) $(INC) -c $< -o $@
+			@mv $(basename $@).d $(DEPS_DIR)/$(notdir $(basename $@)).d && touch $@
     		#-----Output-----#
 			@$(call PROGRESS_BAR, $(basename $(notdir $<)))
 
--include $(DEPS)
-
 # Directories
-dir: $(OBJS_DIR) $(DEPS_DIR)
+dir: $(OBJS_DIR)
 
 $(OBJS_DIR):
 	@mkdir $@
-
-$(DEPS_DIR):
-	@mkdir $@
-
-bonus:	all
+	@mkdir $(DEPS_DIR)
 
 #_____Clean_____#
 clean:	where_c
 		@rm -rf $(OBJS_DIR)
-		@rm -rf $(DEPS_DIR)
     	#-----Output-----#
 		@echo "▶ $(BYELLOW)clean $(YELLOW)Object files removed from $(PROJECT_NAME)$(NC)"
 		@echo "▶ \t$(YELLOW)Dependencies files removed from $(PROJECT_NAME)$(NC)"

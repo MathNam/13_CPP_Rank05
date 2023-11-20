@@ -4,38 +4,37 @@
 # include <string>
 
 class Bureaucrat {
-	public:
-		Bureaucrat(void);
-		Bureaucrat(Bureaucrat const & src);
-		Bureaucrat(std::string const & name, int grade);
-		~Bureaucrat(void);
+public:
+	static int const	highestGrade = 1;
+	static int const	lowestGrade = 150;
 
-		Bureaucrat&	operator=(Bureaucrat const & src);
+	Bureaucrat(void);
+	Bureaucrat(Bureaucrat const & src);
+	Bureaucrat(std::string const & name, int grade);
+	~Bureaucrat(void);
 
-		std::string const &	getName(void) const;
-		int					getGrade(void) const;
+	Bureaucrat&	operator=(Bureaucrat const & src);
 
-		void	incrementGrade(void);
-		void	incrementGrade(int i);
-		void	decrementGrade(void);
-		void	decrementGrade(int i);
+	std::string const &	getName(void) const;
+	int					getGrade(void) const;
 
-		static int const	highestGrade = 1;
-		static int const	lowestGrade = 150;
+	void	incrementGrade(void);
+	void	incrementGrade(int i);
+	void	decrementGrade(void);
+	void	decrementGrade(int i);
 
-		class GradeTooHighException : public std::exception {
-			public:
-				virtual const char*	what(void) const throw();
-		};
+private:
+	class GradeTooHighException : public std::exception {
+		public:
+			virtual const char*	what(void) const throw();
+	};
+	class GradeTooLowException : public std::exception {
+		public:
+			virtual const char*	what(void) const throw();
+	};
 
-		class GradeTooLowException : public std::exception {
-			public:
-				virtual const char*	what(void) const throw();
-		};
-
-	private:
-		std::string const	_name;
-		int					_grade;
+	std::string const	_name;
+	int					_grade;
 
 };
 
