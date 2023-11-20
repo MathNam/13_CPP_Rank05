@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcombeau <mcombeau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matnam <matnam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 16:03:10 by mcombeau          #+#    #+#             */
-/*   Updated: 2022/12/21 15:18:14 by mcombeau         ###   ########.fr       */
+/*   Updated: 2023/11/20 13:34:14 by matnam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	createTestForm(std::string name, int gradeToSign, int gradeToExecute)
 	}
 	catch(std::exception const & e)
 	{
-		std::cerr << RED "Exception: " << e.what() << RESET << std::endl;
+		std::cerr << "Exception: " << e.what()  << std::endl;
 	}
 }
 

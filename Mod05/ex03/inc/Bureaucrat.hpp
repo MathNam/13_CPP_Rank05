@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bureaucrat.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcombeau <mcombeau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matnam <matnam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 16:02:04 by mcombeau          #+#    #+#             */
-/*   Updated: 2022/12/21 17:58:57 by mcombeau         ###   ########.fr       */
+/*   Updated: 2023/11/20 11:38:49 by matnam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class Bureaucrat
 		Bureaucrat(std::string const & name, int grade);
 		~Bureaucrat(void);
 
-		Bureaucrat &	operator=(Bureaucrat const & src);
+		Bureaucrat&	operator=(Bureaucrat const & src);
 
 		std::string const &	getName(void) const;
 		int					getGrade(void) const;
@@ -36,20 +36,20 @@ class Bureaucrat
 		void	decrementGrade(void);
 		void	decrementGrade(int i);
 
-		void	signForm(AForm & form) const;
-		void	executeForm(AForm & form) const;
+		void	signForm(AForm& form) const;
+		void	executeForm(AForm& form) const;
 
 		static int const	highestGrade = 1;
 		static int const	lowestGrade = 150;
 
 		class GradeTooHighException : public std::exception {
 			public:
-				virtual const char *	what(void) const throw();
+				virtual const char*	what(void) const throw();
 		};
 
 		class GradeTooLowException : public std::exception {
 			public:
-				virtual const char *	what(void) const throw();
+				virtual const char*	what(void) const throw();
 		};
 
 	private:
@@ -58,6 +58,6 @@ class Bureaucrat
 
 };
 
-std::ostream &	operator<<(std::ostream & os, Bureaucrat const & obj);
+std::ostream &	operator<<(std::ostream& os, Bureaucrat const & obj);
 
 #endif

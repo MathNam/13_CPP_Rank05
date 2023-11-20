@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Form.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcombeau <mcombeau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matnam <matnam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/21 12:32:59 by mcombeau          #+#    #+#             */
-/*   Updated: 2022/12/21 15:03:22 by mcombeau         ###   ########.fr       */
+/*   Updated: 2023/11/20 13:31:17 by matnam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,12 @@
 #include "Form.hpp"
 #include <iostream>
 
-#define RESET	"\e[0m"
-#define RED		"\e[31m"
-#define GREEN	"\e[32m"
-#define YELLOW	"\e[33m"
-#define BLUE	"\e[34m"
-#define PURPLE	"\e[35m"
-#define CYAN	"\e[36m"
-
 Form::Form(void) :	_name("Basic Form"),
 					_isSigned(false),
 					_gradeRequiredToSign(Bureaucrat::lowestGrade),
 					_gradeRequiredToExecute(Bureaucrat::lowestGrade)
 {
-	std::cout << CYAN "Form default constructor called." RESET << std::endl;
+	std::cout << "Form default constructor called." << std::endl;
 	return ;
 }
 
@@ -36,7 +28,7 @@ Form::Form(Form const & src) :	_name(src._name),
 								_gradeRequiredToSign(src._gradeRequiredToSign),
 								_gradeRequiredToExecute(src._gradeRequiredToExecute)
 {
-	std::cout << CYAN "Form copy constructor called." RESET << std::endl;
+	std::cout << "Form copy constructor called." << std::endl;
 	return ;
 }
 
@@ -46,7 +38,7 @@ Form::Form(std::string const & name, int const gradeToSign, int const gradeToExe
 				_gradeRequiredToSign(gradeToSign),
 				_gradeRequiredToExecute(gradeToExecute)
 {
-	std::cout << CYAN "Form attribute constructor called." RESET << std::endl;
+	std::cout << "Form attribute constructor called." << std::endl;
 	if (gradeToSign < Bureaucrat::highestGrade || gradeToExecute < Bureaucrat::highestGrade )
 		throw (Form::GradeTooHighException());
 	if (gradeToSign > Bureaucrat::lowestGrade || gradeToExecute > Bureaucrat::lowestGrade)
@@ -56,13 +48,13 @@ Form::Form(std::string const & name, int const gradeToSign, int const gradeToExe
 
 Form::~Form(void)
 {
-	std::cout << CYAN "Form destructor called." RESET << std::endl;
+	std::cout << "Form destructor called." << std::endl;
 	return ;
 }
 
 Form &	Form::operator=(Form const & src)
 {
-	std::cout << CYAN "Form assignment operator overload called." RESET << std::endl;
+	std::cout << "Form assignment operator overload called." << std::endl;
 	this->_isSigned = src._isSigned;
 	return (*this);
 }

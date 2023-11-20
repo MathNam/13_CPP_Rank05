@@ -1,44 +1,26 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mcombeau <mcombeau@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/19 16:03:10 by mcombeau          #+#    #+#             */
-/*   Updated: 2022/12/21 12:28:00 by mcombeau         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "Bureaucrat.hpp"
 #include <iostream>
 
-#define RESET	"\e[0m"
-#define RED		"\e[31m"
 
 void	createTestBureaucrat(std::string name, int grade)
 {
 	std::cout << std::endl << "-- Creating bureaucrat named \""
 		<< name << "\" with grade " << grade << ":" << std::endl;
-	try
-	{
+	try {
 		Bureaucrat bureaucrat(name, grade);
 		std::cout << bureaucrat << " successfully created." << std::endl;
 		return ;
 	}
-	catch(Bureaucrat::GradeTooHighException & e)
-	{
-		std::cerr << RED "Exception: " << e.what() << RESET << std::endl;
+	catch(Bureaucrat::GradeTooHighException& e) {
+		std::cerr << "Exception: " << e.what() << std::endl;
 	}
-	catch(Bureaucrat::GradeTooLowException & e)
-	{
-		std::cerr << RED "Exception: " << e.what() << RESET << std::endl;
+	catch(Bureaucrat::GradeTooLowException& e) {
+		std::cerr << "Exception: " << e.what() << std::endl;
 	}
 }
 
 int	main(void)
 {
-
 	std::cout << std::endl << "---- TEST BUREAUCRAT DEFAULT CONSTRUCTOR" << std::endl;
 	{
 		Bureaucrat	bureaucrat;
@@ -72,8 +54,7 @@ int	main(void)
 		Bureaucrat bureaucrat("Sam", 2);
 		std::cout << "Bureaucrat created:\n"
 			"\t" << bureaucrat << std::endl;
-		try
-		{
+		try {
 			std::cout << "Decrementing grade by 1 -> result should be " << bureaucrat.getGrade() + 1 << ":" << std::endl;
 			bureaucrat.decrementGrade();
 			std::cout << bureaucrat << std::endl;
@@ -87,13 +68,11 @@ int	main(void)
 			bureaucrat.incrementGrade();
 			std::cout << bureaucrat << std::endl;
 		}
-		catch (Bureaucrat::GradeTooHighException & e)
-		{
-			std::cout << RED "Exception: " << e.what() << std::endl;
+		catch (Bureaucrat::GradeTooHighException & e) {
+			std::cout << "Exception: " << e.what() << std::endl;
 		}
-		catch (Bureaucrat::GradeTooLowException & e)
-		{
-			std::cout << RED "Exception: " << e.what() << std::endl;
+		catch (Bureaucrat::GradeTooLowException & e) {
+			std::cout << "Exception: " << e.what() << std::endl;
 		}
 	}
 	{
@@ -101,8 +80,7 @@ int	main(void)
 		Bureaucrat bureaucrat("Alex", Bureaucrat::lowestGrade);
 		std::cout << "Bureaucrat created:\n"
 			"\t" << bureaucrat << std::endl;
-		try
-		{
+		try {
 			std::cout << "Incrementing grade by 50 -> result should be " << bureaucrat.getGrade() - 50 << ":" << std::endl;
 			bureaucrat.incrementGrade(50);
 			std::cout << bureaucrat << std::endl;
@@ -116,13 +94,11 @@ int	main(void)
 			bureaucrat.decrementGrade(100);
 			std::cout << bureaucrat << std::endl;
 		}
-		catch (Bureaucrat::GradeTooHighException & e)
-		{
-			std::cout << RED "Exception: " << e.what() << std::endl;
+		catch (Bureaucrat::GradeTooHighException & e) {
+			std::cout << "Exception: " << e.what() << std::endl;
 		}
-		catch (Bureaucrat::GradeTooLowException & e)
-		{
-			std::cout << RED "Exception: " << e.what() << std::endl;
+		catch (Bureaucrat::GradeTooLowException & e) {
+			std::cout << "Exception: " << e.what() << std::endl;
 		}
 	}
 	return (0);
