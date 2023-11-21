@@ -6,6 +6,8 @@
 # include "PresidentialPardonForm.hpp"
 # include "ShrubberyCreationForm.hpp"
 # include <string>
+# include <iostream>
+
 
 class Intern {
 public:
@@ -23,9 +25,9 @@ private:
 	class InvalidName : public std::exception {
 		virtual const char* what(void) const throw();
 	};
-	AForm* createShubberyCreationForm(std::string const & target);
-	AForm* createRobotomyRequestForm(std::string const & target);
-	AForm* createPresidentialPardonForm(std::string const & target);
+	// AForm*	createShubberyCreationForm(std::string const & target);
+	// AForm*	createRobotomyRequestForm(std::string const & target);
+	// AForm*	createPresidentialPardonForm(std::string const & target);
 };
 
 #endif

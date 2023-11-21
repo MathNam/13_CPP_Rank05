@@ -28,29 +28,44 @@ const char* Intern::NameRequired::what(void) const throw()
 	return ("Form name required.");
 }
 
-const char* Intern::NameRequired::what(void) const throw()
+const char* Intern::InvalidName::what(void) const throw()
 {
 	return ("Invalid form name.");
 }
 
+AForm*	createShubberyCreationForm(std::string const & target)
+{
+	return new ShrubberyCreationForm(target);
+}
+
+AForm*	createRobotomyRequestForm(std::string const & target)
+{
+	return new RobotomyRequestForm(target);
+}
+
+AForm*	createPresidentialPardonForm(std::string const & target)
+{
+	return new PresidentialPardonForm(target);
+}
+
 AForm*	Intern::makeForm(std::string const & name, std::string const & target)
 {
-	if (!name)
+	if (name.empty())
 		throw Intern::NameRequired();
 
 	static std::string formList[3] = {"ShurubberyCreationForm",
 							"RobotomyRequestForm",
 							"PresidentialPardonForm"};
-	AFrom*	(Intern::*function_tab[3])(std::string const & target) = {
-				&Intern::createShubberyCreationForm,
-				&Intern::createRobotomyRequestForm,
-				&Intern::createPresidentialPardonForm
+	AForm*	(*function_tab[3])(std::string const &) = {
+				&createShubberyCreationForm,
+				&createRobotomyRequestForm,
+				&createPresidentialPardonForm
 			};
-	for (i = 0; i < 3; i++){
+	for (int i = 0; i < 3; i++){
 		if (name == formList[i]){
-			AForm* Form = (this->function_tab[i])(name);
+			AForm* Form = (function_tab[i])(target);
 			return Form;
 		}
 	}
-	throw 	
+	throw Intern::InvalidName();
 }
