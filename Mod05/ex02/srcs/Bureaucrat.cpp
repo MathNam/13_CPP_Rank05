@@ -2,14 +2,14 @@
 #include <iostream>
 
 Bureaucrat::Bureaucrat(void)
-	: _name("John Doe"), _grade(Bureaucrat::lowestGrade)
+		: _name("John Doe"), _grade(Bureaucrat::lowestGrade)
 {
 	std::cout << "Bureaucrat default constructor called." << std::endl;
 	return ;
 }
 
 Bureaucrat::Bureaucrat(Bureaucrat const & src)
-	: _name(src._name), _grade(src._grade)
+		: _name(src._name), _grade(src._grade)
 {
 	std::cout << "Bureaucrat copy constructor called." << std::endl;
 	return ;
@@ -34,10 +34,11 @@ Bureaucrat::~Bureaucrat(void)
 	return ;
 }
 
-Bureaucrat&	Bureaucrat::operator=(Bureaucrat const & src)
+Bureaucrat&	Bureaucrat::operator=(Bureaucrat const & rhs)
 {
 	std::cout << "Bureaucrat assignment operator overload called." << std::endl;
-	this->_grade = src._grade;
+	if (this != &rhs)
+		this->_grade = rhs._grade;
 	return (*this);
 }
 
@@ -85,6 +86,18 @@ void	Bureaucrat::decrementGrade(int i)
 	return ;
 }
 
+void	Bureaucrat::signForm(AForm& form) const
+{
+	try {
+		form.sign(*this);
+		std::cout << *this << " signed " << form << std::endl;
+	}
+	catch (std::exception const & e) {
+		std::cout << *this << " couldn't sign " << form << " because: "
+			<< e.what() << std::endl;
+	}
+}
+
 const char*	Bureaucrat::GradeTooHighException::what(void) const throw()
 {
 	return ("Grade too low.");	
@@ -95,7 +108,19 @@ const char*	Bureaucrat::GradeTooLowException::what(void) const throw()
 	return ("Grade too high.");
 }
 
-std::ostream&	operator<<(std::ostream& os, Bureaucrat const & obj)
+void	Bureaucrat::executeForm(AForm const & form) 
+{
+	try {
+		form.execute(*this);
+		std::cout << *this << " executed " << form << "."  <<std::endl;
+	}
+	catch (std::exception const & e) {
+		std::cout << *this << " could not execute " << form << " because: " << e.what() << std::endl;
+	}
+
+}
+
+std::ostream&	operator<<(std::ostream & os, Bureaucrat const & obj)
 {
 	os << "Bureaucrat \"" << obj.getName()
 		<< "\" (grade: " << obj.getGrade() << ")";

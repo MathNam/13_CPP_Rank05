@@ -6,22 +6,23 @@
 
 class Bureaucrat;
 
-class Form {
+class AForm {
 public:
-	Form(void);
-	Form(Form const & src);
-	Form(std::string const & name, int const gradeToSign, int const gradeToExecute);
-	~Form(void);
+	AForm(void);
+	AForm(AForm const & src);
+	AForm(std::string const & name, int const gradeToSign, int const gradeToExecute);
+	~AForm(void);
 
-	Form&	operator=(Form const & src);
+	virtual AForm&	operator=(AForm const & rhs);
 	std::string const &	getName(void) const;
 
-	bool	isSigned(void) const;
-	int		getSignGrade(void) const;
-	int		getExecGrade(void) const;
-	void	sign(Bureaucrat const & Bureaucrat);
+	bool			isSigned(void) const;
+	int				getSignGrade(void) const;
+	int				getExecGrade(void) const;
+	void			sign(Bureaucrat const & Bureaucrat);
+	virtual void	execute(Bureaucrat const & executor) const = 0;
 
-private:
+protected:
 	class GradeTooLowException : public std::exception {
 		public:
 			virtual const char*	what() const throw();
@@ -37,12 +38,17 @@ private:
 			virtual const char*	what() const throw();
 	};
 
+	class NotSigned : public std::exception {
+		public:
+			virtual const char* what() const throw();
+	};
+private:
 	std::string const	_name;
 	bool				_isSigned;
 	int const			_signGrade;
 	int const			_execGrade;
 };
 
-std::ostream&	operator<<(std::ostream& os, Form const & obj);
+std::ostream&	operator<<(std::ostream& os, AForm const & obj);
 
 #endif

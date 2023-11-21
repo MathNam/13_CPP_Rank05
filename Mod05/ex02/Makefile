@@ -4,7 +4,7 @@
 
 # Name
 
-PROJECT_NAME = form
+PROJECT_NAME = adv_form
 NAME	= ./$(PROJECT_NAME)
 
 #______________________________________________________________________________#
@@ -64,7 +64,10 @@ INC += -I $(INC_DIR)
 #‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾#
 
 HEADER +=	Bureaucrat.hpp\
-			Form.hpp
+			Form.hpp\
+			ShrubberyCreationForm.hpp\
+			RobotomyRequestForm.hpp\
+			PresidentialPardonForm.hpp
 
 vpath %.h $(INC_DIR)
 
@@ -79,7 +82,10 @@ SRCS_DIR += ./srcs
 #‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾#
 
 SRCS +=	Bureaucrat.cpp\
-		Form.cpp\
+		AForm.cpp\
+		ShrubberyCreationForm.cpp\
+		RobotomyRequestForm.cpp\
+		PresidentialPardonForm.cpp\
 		main.cpp
 
 #______________________________________________________________________________#

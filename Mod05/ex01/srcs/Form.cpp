@@ -4,8 +4,8 @@
 
 Form::Form(void) :	_name("Basic Form"),
 					_isSigned(false),
-					_gradeRequiredToSign(Bureaucrat::lowestGrade),
-					_gradeRequiredToExecute(Bureaucrat::lowestGrade)
+					_signGrade(Bureaucrat::lowestGrade),
+					_execGrade(Bureaucrat::lowestGrade)
 {
 	std::cout << "Form default constructor called." << std::endl;
 	return ;
@@ -13,8 +13,8 @@ Form::Form(void) :	_name("Basic Form"),
 
 Form::Form(Form const & src) :	_name(src._name),
 								_isSigned(false),
-								_gradeRequiredToSign(src._gradeRequiredToSign),
-								_gradeRequiredToExecute(src._gradeRequiredToExecute)
+								_signGrade(src._signGrade),
+								_execGrade(src._execGrade)
 {
 	std::cout << "Form copy constructor called." << std::endl;
 	return ;
@@ -23,8 +23,8 @@ Form::Form(Form const & src) :	_name(src._name),
 Form::Form(std::string const & name, int const gradeToSign, int const gradeToExecute)
 			:	_name(name),
 				_isSigned(false),
-				_gradeRequiredToSign(gradeToSign),
-				_gradeRequiredToExecute(gradeToExecute)
+				_signGrade(gradeToSign),
+				_execGrade(gradeToExecute)
 {
 	std::cout << "Form attribute constructor called." << std::endl;
 	if (gradeToSign < Bureaucrat::highestGrade || gradeToExecute < Bureaucrat::highestGrade )
@@ -40,7 +40,7 @@ Form::~Form(void)
 	return ;
 }
 
-Form &	Form::operator=(Form const & src)
+Form&	Form::operator=(Form const & src)
 {
 	std::cout << "Form assignment operator overload called." << std::endl;
 	this->_isSigned = src._isSigned;
@@ -57,46 +57,46 @@ bool	Form::isSigned(void) const
 	return (this->_isSigned);
 }
 
-int	Form::getGradeRequiredToSign(void) const
+int	Form::getSignGrade(void) const
 {
-	return (this->_gradeRequiredToSign);
+	return (this->_signGrade);
 }
 
-int	Form::getGradeRequiredToExecute(void) const
+int	Form::getExecGrade(void) const
 {
-	return (this->_gradeRequiredToExecute);
+	return (this->_execGrade);
 }
 
-void	Form::beSigned(Bureaucrat const & bureaucrat)
+void	Form::sign(Bureaucrat const & bureaucrat)
 {
 	if (this->_isSigned)
 		throw (Form::AlreadySignedException());
-	if (bureaucrat.getGrade() > this->_gradeRequiredToSign)
+	if (bureaucrat.getGrade() > this->_signGrade)
 		throw (Form::GradeTooLowException());
 	this->_isSigned = true;
 	return ;
 }
 
-const char *	Form::GradeTooHighException::what(void) const throw()
+const char*	Form::GradeTooHighException::what(void) const throw()
 {
 	return ("Grade too high for form.");
 }
 
-const char *	Form::GradeTooLowException::what(void) const throw()
+const char*	Form::GradeTooLowException::what(void) const throw()
 {
 	return ("Grade too low for form.");
 }
 
-const char *	Form::AlreadySignedException::what(void) const throw()
+const char*	Form::AlreadySignedException::what(void) const throw()
 {
 	return ("Form is already signed.");
 }
 
-std::ostream &	operator<<(std::ostream & os, Form const & obj)
+std::ostream&	operator<<(std::ostream & os, Form const & obj)
 {
 	os << "\"" << obj.getName() << "\" ["
 		<< (obj.isSigned() ? "signed" : "unsigned") << "] "
-		<< "(Required grade to sign: " << obj.getGradeRequiredToSign()
-		<< "; to execute: " << obj.getGradeRequiredToExecute() << ")";
+		<< "(Required grade to sign: " << obj.getSignGrade()
+		<< "; to execute: " << obj.getExecGrade() << ")";
 	return (os);
 }

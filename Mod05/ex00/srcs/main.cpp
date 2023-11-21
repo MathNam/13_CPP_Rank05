@@ -11,10 +11,7 @@ void	createTestBureaucrat(std::string name, int grade)
 		std::cout << bureaucrat << " successfully created." << std::endl;
 		return ;
 	}
-	catch(Bureaucrat::GradeTooHighException& e) {
-		std::cerr << "Exception: " << e.what() << std::endl;
-	}
-	catch(Bureaucrat::GradeTooLowException& e) {
+	catch(std::exception const & e) {
 		std::cerr << "Exception: " << e.what() << std::endl;
 	}
 }
@@ -68,10 +65,7 @@ int	main(void)
 			bureaucrat.incrementGrade();
 			std::cout << bureaucrat << std::endl;
 		}
-		catch (Bureaucrat::GradeTooHighException & e) {
-			std::cout << "Exception: " << e.what() << std::endl;
-		}
-		catch (Bureaucrat::GradeTooLowException & e) {
+		catch (std::exception const & e) {
 			std::cout << "Exception: " << e.what() << std::endl;
 		}
 	}
@@ -94,10 +88,7 @@ int	main(void)
 			bureaucrat.decrementGrade(100);
 			std::cout << bureaucrat << std::endl;
 		}
-		catch (Bureaucrat::GradeTooHighException & e) {
-			std::cout << "Exception: " << e.what() << std::endl;
-		}
-		catch (Bureaucrat::GradeTooLowException & e) {
+		catch (std::exception const & e) {
 			std::cout << "Exception: " << e.what() << std::endl;
 		}
 	}

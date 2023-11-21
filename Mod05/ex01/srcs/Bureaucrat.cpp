@@ -30,7 +30,7 @@ Bureaucrat::Bureaucrat(std::string const & name, int grade)
 
 Bureaucrat::~Bureaucrat(void)
 {
-	std::cout << "Bureaucrat desctructor called." << std::endl;
+	std::cout << "Bureaucrat destructor called." << std::endl;
 	return ;
 }
 
@@ -88,7 +88,7 @@ void	Bureaucrat::decrementGrade(int i)
 void	Bureaucrat::signForm(Form& form) const
 {
 	try {
-		form.beSigned(*this);
+		form.sign(*this);
 		std::cout << *this << " signed " << form << std::endl;
 	}
 	catch (std::exception const & e) {
@@ -99,12 +99,12 @@ void	Bureaucrat::signForm(Form& form) const
 
 const char*	Bureaucrat::GradeTooHighException::what(void) const throw()
 {
-	return ("Bureaucrat cannot outrank CEO: grade too low.");	
+	return ("Grade too low.");	
 }
 
 const char*	Bureaucrat::GradeTooLowException::what(void) const throw()
 {
-	return ("Bureaucrat cannot sink to an intern's level: grade too high.");
+	return ("Grade too high.");
 }
 
 std::ostream&	operator<<(std::ostream & os, Bureaucrat const & obj)
