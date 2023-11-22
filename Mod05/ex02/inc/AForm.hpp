@@ -14,12 +14,13 @@ public:
 	~AForm(void);
 
 	virtual AForm&	operator=(AForm const & rhs);
-	std::string const &	getName(void) const;
 
-	bool			isSigned(void) const;
-	int				getSignGrade(void) const;
-	int				getExecGrade(void) const;
-	void			sign(Bureaucrat const & Bureaucrat);
+	std::string const &	getName(void) const;
+	bool				isSigned(void) const;
+	int					getSignGrade(void) const;
+	int					getExecGrade(void) const;
+
+	void			beSigned(Bureaucrat const & Bureaucrat);
 	virtual void	execute(Bureaucrat const & executor) const = 0;
 
 protected:

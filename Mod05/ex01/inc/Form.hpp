@@ -14,12 +14,12 @@ public:
 	~Form(void);
 
 	Form&	operator=(Form const & src);
-	std::string const &	getName(void) const;
 
-	bool	isSigned(void) const;
-	int		getSignGrade(void) const;
-	int		getExecGrade(void) const;
-	void	sign(Bureaucrat const & Bureaucrat);
+	std::string const &	getName(void) const;
+	bool				isSigned(void) const;
+	int					getSignGrade(void) const;
+	int					getExecGrade(void) const;
+	void	beSigned(Bureaucrat const & Bureaucrat);
 
 private:
 	class GradeTooLowException : public std::exception {

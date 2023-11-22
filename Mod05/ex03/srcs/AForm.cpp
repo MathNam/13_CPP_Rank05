@@ -68,7 +68,7 @@ int	AForm::getExecGrade(void) const
 	return (this->_execGrade);
 }
 
-void	AForm::sign(Bureaucrat const & bureaucrat)
+void	AForm::beSigned(Bureaucrat const & bureaucrat)
 {
 	if (this->_isSigned)
 		throw (AForm::AlreadySignedException());

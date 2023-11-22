@@ -54,10 +54,10 @@ void	ShrubberyCreationForm::execute(Bureaucrat const & executor) const
 
 	std::ofstream	ofs;
 
-	ofs.open((this->_target + "_shrubbery").c_str(), std::ofstream::out | std::ofstream::trunc | std::ofstream::app);
+	ofs.open((this->_target + "_shrubbery").c_str(), std::ofstream::out | std::ofstream::app);
 	if (ofs.is_open())
 	{
-		if (std::rand() % 2)
+		if (rand() % 2)
 			ofs << ShrubberyCreationForm::_treeOne;
 		else
 			ofs << ShrubberyCreationForm::_treeTwo;

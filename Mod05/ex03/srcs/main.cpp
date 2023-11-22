@@ -6,7 +6,7 @@
 /*   By: maaliber <maaliber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 16:03:10 by mcombeau          #+#    #+#             */
-/*   Updated: 2023/11/21 15:14:32 by maaliber         ###   ########.fr       */
+/*   Updated: 2023/11/22 11:03:13 by maaliber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,8 @@
 #include "RobotomyRequestForm.hpp"
 #include "PresidentialPardonForm.hpp"
 #include <iostream>
-
-#define RESET	"\e[0m"
-#define RED		"\e[31m"
+#include <cstdlib>
+#include <ctime>
 
 void	testInternFormCreation(std::string formName, std::string target)
 {
@@ -27,24 +26,23 @@ void	testInternFormCreation(std::string formName, std::string target)
 	Intern	lowlyIntern = Intern();
 	Bureaucrat bigBoss("Big Boss Barry", 1);
 	AForm *	form;
-	try
-	{
+	try {
 		form = lowlyIntern.makeForm(formName, target);
 		bigBoss.signForm(*form);
 		bigBoss.executeForm(*form);
 		delete (form);
 	}
-	catch (std::exception & e)
-	{
-		std::cout << RED ": " << e.what() << RESET << std::endl;
+	catch (std::exception & e) {
+		std::cout << "Exception: " << e.what() << std::endl;
 	}
 }
 
 int	main(void)
 {
-	std::string const	shrubberyFormName = "shrubbery creation";
-	std::string const	robotomyFormName = "robotomy request";
-	std::string const	presidentialFormName = "presidential pardon";
+	srand(time(0));
+	std::string const	shrubberyFormName = "Shrubbery Creation";
+	std::string const	robotomyFormName = "Robotomy Request";
+	std::string const	presidentialFormName = "Presidential Pardon";
 
 	testInternFormCreation(shrubberyFormName, "Garden");
 	testInternFormCreation(robotomyFormName, "Unsuspecting Customer");

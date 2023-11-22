@@ -1,20 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mcombeau <mcombeau@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/22 17:38:28 by mcombeau          #+#    #+#             */
-/*   Updated: 2022/12/29 13:57:13 by mcombeau         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "A.hpp"
 #include "B.hpp"
 #include "Base.hpp"
 #include "C.hpp"
-#include "Colors.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>

@@ -53,9 +53,9 @@ AForm*	Intern::makeForm(std::string const & name, std::string const & target)
 	if (name.empty())
 		throw Intern::NameRequired();
 
-	static std::string formList[3] = {"ShurubberyCreationForm",
-							"RobotomyRequestForm",
-							"PresidentialPardonForm"};
+	static std::string formList[3] = {"Shrubbery Creation",
+							"Robotomy Request",
+							"Presidential Pardon"};
 	AForm*	(*function_tab[3])(std::string const &) = {
 				&createShubberyCreationForm,
 				&createRobotomyRequestForm,

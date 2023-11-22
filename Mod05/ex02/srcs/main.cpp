@@ -3,12 +3,15 @@
 #include "RobotomyRequestForm.hpp"
 #include "PresidentialPardonForm.hpp"
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 #define RESET	"\e[0m"
 #define RED		"\e[31m"
 
 int	main(void)
 {
+	srand(time(0));
 	Bureaucrat	lowlyBureaucrat("Lowly Larry", 142);
 	Bureaucrat	averageBureaucrat("Average Andy", 65);
 	Bureaucrat	highBureaucrat("High Harry", 6);

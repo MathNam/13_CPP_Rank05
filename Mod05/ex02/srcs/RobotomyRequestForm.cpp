@@ -51,10 +51,7 @@ void	RobotomyRequestForm::execute(Bureaucrat const & executor) const
 		throw(AForm::NotSigned());
 	else if (executor.getGrade() > this->getExecGrade())
 		throw(AForm::GradeTooLowException());
-	
-	bool	success = (rand() % 2) == 0;
-
-	if (success)
+	if (rand() % 2)
 		std::cout << this->_target << " has been robotomized successfully." << std::endl;
 	else
 		std::cout << this->_target << "'s robotomy has failed." << std::endl;

@@ -37,6 +37,8 @@ int	main(void)
 		Form form("FormXYZ", 42, 42);
 		std::cout << "Form is " << form << std::endl;
 		Form formCopy(form);
+		Form operatorForm = form;
+		std::cout << "operatorForm copy is " << operatorForm << std::endl;
 		std::cout << "Form copy is " << formCopy << std::endl;
 	}
 	{
