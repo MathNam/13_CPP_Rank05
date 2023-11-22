@@ -2,31 +2,85 @@
 
 #define	PRINT_MSG 0
 
-std::numeric_limits<int>::max();
-std::numeric_limits<int>::min();
-std::numeric_limits<float>::max();
-std::numeric_limits<float>::min();
-std::numeric_limits<char>::max();
-std::numeric_limits<char>::min();
+enum literal_type {
+    error,
+    _pseudo_literal,
+    _char,
+    _int,
+    _float,
+    _double,
+};
 
-ScalarConverter::ScalarConverter(void)
+static bool	isChar(const std::string& str)
 {
-	std::cout << "ScalarConverter default constructor called." << std::endl;
+	return (str.length() == 1 && std::isprint(str[0]));
 }
 
-ScalarConverter::ScalarConverter(ScalarConverter const &src)
+static bool	isInt(const std::string& str)
 {
-		std::cout << "ScalarConverter copy constructor called." << std::endl;
+	if (str.length() == 1 && !std::isdigit(str[0]))
+		return true;
+	if (str.length() > 1 && (str[0] == '+' || str[0] == '-')) {
+		for (size_t i = 1; i < str.length(); i++) {
+			if (!std::isdigit(str[i]))
+				return false;
+		}
+		return true;
+	}
 }
 
-ScalarConverter::~ScalarConverter(void)
+static bool	isFloat(const std::string& str)
 {
-		std::cout << "ScalarConverter destructor called." << std::endl;
+	if (str.length() == 1 && !std::isdigit(str[0]))
+		return true;
+	if (str.length() > 1 && (str[0] == '+' || str[0] == '-')) {
+		for (size_t i = 1; i < str.length(); i++) {
+			if (!std::isdigit(str[i]))
+				break;
+		}
+		for (size_t j = str.find('.') + 1; j < str.length(); j++) {
+			if (!std::isdigit(str[j]))
+					break;
+		}
+		if (str[str.length() - 1] == 'f')
+			return true;
+		return false;
+	}
 }
 
-static 
+static bool	isDouble(const std::string& str)
+{
+	if (str == "nan" || str == "nanf" || str == "+inf" || str == "+inff" || str == "-inf" || str == "-inff")
+		return true;
+	if (str.length() == 1 && !std::isdigit(str[0]))
+		return true;
+	if (str.length() > 1 && (str[0] == '+' || str[0] == '-')) {
+		for (size_t i = 1; i < str.length(); i++) {
+			if (!std::isdigit(str[i]))
+				break;
+		}
+		for (size_t j = str.find('.') + 1; j < str.length(); j++) {
+			if (!std::isdigit(str[j]))
+				return false;
+		}
+		return true;
+	}
+}
+
+static int	getType(const std::string& str)
+{
+	if (isChar(str))
+		return _char;
+	if (isInt(str))
+		return _int;
+	if (isFloat(str))
+		return _float;
+	if (isDouble(str))
+		return _double;
+	return error;
+}
 
 void	ScalarConverter::convert(std::string const & str)
 {
-	
+	getType()
 }

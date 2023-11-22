@@ -1,4 +1,4 @@
-#include "Converter.hpp"
+#include "ScalarConverter.hpp"
 #include <iostream>
 
 int	main(int ac, char ** av)
@@ -12,7 +12,7 @@ int	main(int ac, char ** av)
 	
 	try {
 		std::cout << "---- Converting [" << av[1] << "]" << std::endl;
-		Converter	scalarConverter(av[1]);
+		ScalarConverter	scalarConverter(av[1]);
 		std::cout << scalarConverter << std::endl;
 	}
 	catch(const std::exception& e) {

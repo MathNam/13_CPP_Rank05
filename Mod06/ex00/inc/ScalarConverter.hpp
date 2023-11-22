@@ -8,15 +8,9 @@
 # include <limits>
 # include <string>
 
-class ScalarConverter
-{
+class ScalarConverter {
 public:
 	static void	convert(std::string const & str);
-
-protected:
-	ScalarConverter(void);
-	ScalarConverter(ScalarConverter const & src);
-	~ScalarConverter();
 };
 
 std::ostream &	operator<<(std::ostream & os, ScalarConverter const & converter);
