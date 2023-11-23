@@ -1,10 +1,8 @@
 #include <iostream>
-#include <cstdlib>
-#include "Array.hpp"
+#include <Array.hpp>
 
 #define MAX_VAL 750
-
-int main(void)
+int main(int, char**)
 {
     Array<int> numbers(MAX_VAL);
     int* mirror = new int[MAX_VAL];

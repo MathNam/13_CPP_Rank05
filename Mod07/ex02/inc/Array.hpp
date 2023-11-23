@@ -1,73 +1,85 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Array.hpp                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mcombeau <mcombeau@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/25 14:34:49 by mcombeau          #+#    #+#             */
-/*   Updated: 2023/01/03 14:19:26 by mcombeau         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#ifndef ARRAY_HPP
+# define ARRAY_HPP
 
-#ifndef ARRAY_TPP_CLASS_H
-# define ARRAY_TPP_CLASS_H
+#include <stdexcept>
+#include <exception>
+#include <iostream>
+#include <string>
+#include <cstdlib>
 
-# include <iostream>
+template <typename T>
+class Array {
+public:
+	Array();
+	Array(unsigned int n);
+	Array(Array const & src);
+	~Array();
 
-template <typename T = int>
-class Array
-{
-	public:
-		class OutOfBoundsException : public std::exception {
-			public:
-				virtual char const *	what(void) const throw() {
-					return ("Array out of bounds.");
-				}
-		};
-		
-		Array(void) : _array(NULL), _size(0) {}
-		Array(unsigned int n) : _array(new T[n]), _size(n) {}
-		Array(Array const & src) : _array(new T[src._size]), _size(src._size) {
-			for (unsigned int i = 0; i < this->_size; i++)
-				this->_array[i] = src._array[i];
-		}
-		~Array(void) { delete [] _array; }
+	Array&	operator=(Array const & rhs);
+	T&		operator[](size_t index);
 
-		Array &	operator=(Array const & src) {
-			if (this == &src)
-				return (*this);
-			if (this->_size != src._size) {
-				delete [] _array;
-				this->_size = src._size;
-				this->_array = new T[this->_size];
-			}
-			for (unsigned int i = 0; i < this->_size; i++)
-				this->_array[i] = src._array[i];
-			return (*this);
-		}
+	size_t 	size(void);
 
-		T &	operator[](unsigned int index) {
-			if (index >= this->_size)
-				throw (OutOfBoundsException());
-			return (this->_array[index]);
-		}
+private:
+	class outOfBound : public std::exception {
+		public:
+			virtual const char *what(void) const throw();
+	};
 
-		unsigned int	size(void) const {
-			return (this->_size);
-		}	
-
-	private:
-		T *				_array;
-		unsigned int	_size;
+	T*		_arr;
+	size_t 	_size;
 };
 
 template <typename T>
-std::ostream &	operator<<(std::ostream &os, Array<T> &obj) {
-    for (unsigned int i = 0; i < obj.size(); ++i) {
-        os << "[" << obj[i] << "] ";
-    }
-    return (os);
+Array<T>::Array(void) : _arr(NULL), _size(0) {}
+
+template <typename T>
+Array<T>::Array(unsigned int n) : _arr(new T[n]), _size(n) {}
+
+template <typename T>
+Array<T>::Array(Array<T> const & src) : _arr(new T[src._size]), _size(src._size)
+{
+	for (size_t i = 0; i < this->_size ; i++)
+		_arr[i] = src._arr[i];
+}
+
+template <typename T>
+Array<T>&	Array<T>::operator=(Array<T> const & rhs)
+{
+	if (this == &rhs)
+		return *this;
+	delete [] this->_arr;
+	this->_size = rhs._size;
+	this->_arr = new T[this->_size];
+	for (size_t i = 0; i < this->_size; i++)
+		this->_arr[i] = rhs._arr[i];
+	return *this;
+}
+
+template <typename T>
+T&	Array<T>::operator[](size_t idx)
+{
+	if (idx < 0 || idx >= this->_size)
+		throw (Array<T>::outOfBound());
+	return (this->_arr[idx]);
+}
+
+template <typename T>
+Array<T>::~Array(void)
+{
+	delete [] _arr;
+}
+
+template <typename T>
+const char*	Array<T>::outOfBound::what(void) const throw()
+{
+	return ("Index out of bound.");
+}
+
+template <typename T>
+size_t Array<T>::size(void)
+{
+	return this->_size;
 }
 
 #endif
