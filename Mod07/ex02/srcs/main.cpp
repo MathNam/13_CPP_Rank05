@@ -12,7 +12,7 @@ int main(int, char**)
 	cout << endl << "===== Empty array =====" << endl << endl;
 	{
 		Array<float> emptyArray;
-		try{
+		try {
 			cout << emptyArray[0] << endl;
 			cout << emptyArray[2000] << endl;
 		} catch (const std::exception &e){
@@ -27,7 +27,7 @@ int main(int, char**)
 		strArray[2] = "ghi";
 		strArray[3] = "jkl";
 		strArray[4] = "mno";
-		try{
+		try {
 			for(unsigned int i = 0; i < 6; i++)
 				cout << strArray[i] << endl;
 		} catch (const std::exception &e) {
@@ -40,9 +40,8 @@ int main(int, char**)
 		strArray[2] = "3";
 		strArray[3] = "4";
 		strArray[4] = "5";
-		try{
-			for(unsigned int i = 0; i < 5; i++)
-			{
+		try {
+			for(unsigned int i = 0; i < 5; i++) {
 				cout << "original :\t" << strArray[i] << endl;
 				cout << "copy :\t\t" << copy[i] << endl;
 			}
@@ -51,7 +50,7 @@ int main(int, char**)
 		}
 		cout << endl << "===== Assignment operator =====" << endl << endl;
 		copy = strArray;
-		try{
+		try {
 			for(unsigned int i = 0; i < 5; i++)
 				cout << copy[i] << endl;
 		} catch (const std::exception &e) {
@@ -63,8 +62,7 @@ int main(int, char**)
 		Array<int> numbers(MAX_VAL);
 		int* mirror = new int[MAX_VAL];
 		srand(time(NULL));
-		for (int i = 0; i < MAX_VAL; i++)
-		{
+		for (int i = 0; i < MAX_VAL; i++) {
 			const int value = rand();
 			numbers[i] = value;
 			mirror[i] = value;
@@ -75,33 +73,26 @@ int main(int, char**)
 			Array<int> test(tmp);
 		}
 
-		for (int i = 0; i < MAX_VAL; i++)
-		{
-			if (mirror[i] != numbers[i])
-			{
+		for (int i = 0; i < MAX_VAL; i++) {
+			if (mirror[i] != numbers[i]) {
 				std::cerr << "didn't save the same value!!" << std::endl;
 				return 1;
 			}
 		}
-		try
-		{
+		try {
 			numbers[-2] = 0;
 		}
-		catch(const std::exception& e)
-		{
+		catch(const std::exception& e) {
 			std::cerr << e.what() << '\n';
 		}
-		try
-		{
+		try {
 			numbers[MAX_VAL] = 0;
 		}
-		catch(const std::exception& e)
-		{
+		catch(const std::exception& e) {
 			std::cerr << e.what() << '\n';
 		}
 
-		for (int i = 0; i < MAX_VAL; i++)
-		{
+		for (int i = 0; i < MAX_VAL; i++) {
 			numbers[i] = rand();
 		}
 		delete [] mirror;

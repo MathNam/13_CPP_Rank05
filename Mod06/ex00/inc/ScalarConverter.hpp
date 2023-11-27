@@ -13,6 +13,4 @@ public:
 	static void	convert(std::string const & str);
 };
 
-std::ostream &	operator<<(std::ostream & os, ScalarConverter const & converter);
-
 #endif

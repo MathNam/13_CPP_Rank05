@@ -1,32 +1,23 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Span.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mcombeau <mcombeau@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/26 16:04:48 by mcombeau          #+#    #+#             */
-/*   Updated: 2023/01/03 16:40:53 by mcombeau         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "Span.hpp"
-#include <algorithm>
-#include <iterator>
-#include <limits>
-#include <numeric>
 
-Span::Span(void) : _range(), _maxSize(0)
+
+Span::Span(void) :
+	_maxSize(0),
+	_list(_maxSize)
 {
 	return ;
 }
 
-Span::Span(unsigned int N) : _range(), _maxSize(N)
+Span::Span(unsigned int N) :
+	_maxSize(N),
+	_list(_maxSize)
 {
 	return ;
 }
 
-Span::Span(Span const & src) : _range(src._range), _maxSize(src._maxSize)
+Span::Span(Span const & src) :
+	_maxSize(src._maxSize),
+	_list(src._list)
 {
 	return ;
 }
@@ -36,83 +27,68 @@ Span::~Span(void)
 	return ;
 }
 
-Span &	Span::operator=(Span const & src)
+const char * Span::tooManyElements::what(void) const throw()
 {
-	if (this != & src)
-	{
+	return "Too many elements added.";
+}
+
+const char * Span::noSpanCanBeFound::what(void) const throw()
+{
+	return "No span can be found, list is empty or only contains one element.";
+}
+
+Span&	Span::operator=(Span const & src)
+{
+	if (this != & src) {
 		this->_maxSize = src._maxSize;
-		this->_range.clear();
-		this->_range.insert(this->_range.end(),
-			src._range.begin(), src._range.end());
+		this->_list.clear();
+		this->_list.insert(this->_list.end(),
+			src._list.begin(), src._list.end());
 	}
 	return (*this);
 }
 
-std::vector<int> const &	Span::getRange(void) const
+void	Span::addNumber(int nb)
 {
-	return (this->_range);
+	if (this->_list.size() >= this->_maxSize)
+		throw (Span::tooManyElements());
+	this->_list.push_back(nb);
 }
 
-void	Span::addNumber(int number)
+void	Span::addNumber(int arr[], int n)
 {
-	if (this->_range.size() == this->_maxSize)
-		throw (Span::FullRangeException());
-	this->_range.push_back(number);
-	return ;
+	if (this->_list.size() + n > this->_maxSize)
+		throw (Span::tooManyElements());
+	for (int i = 0; i < n; i++) {
+			this->_list.push_back(arr[i]);
+	}
 }
 
-unsigned int	Span::shortestSpan(void) const
+void	Span::addNumber(std::list<int> app)
 {
-	int	shortest;
-
-	if (this->_range.size() < 2)
-		throw (Span::RangeTooSmallException());
-
-	std::vector<int>	sorted(this->_range);
-	std::sort(sorted.begin(), sorted.end());
-
-	std::vector<int>	difference(sorted);
-	std::adjacent_difference(sorted.begin(), sorted.end(), difference.begin());
-	shortest = *std::min_element(++(difference.begin()), difference.end());
-	return (shortest);
+	if (this->_list.size() + app.size() > this->_maxSize)
+		throw (Span::tooManyElements());
+	this->_list.insert(this->_list.end(), app.begin(), app.end());
 }
 
-unsigned int	Span::longestSpan(void) const
+unsigned int	Span::shortestSpan(void)
 {
-	if (this->_range.size() < 2)
-		throw (Span::RangeTooSmallException());
-	unsigned int largest = *std::max_element(this->_range.begin(), this->_range.end());
-	unsigned int smallest = *std::min_element(this->_range.begin(), this->_range.end());
-	return (largest - smallest);
+	std::list<int>::iterator	it;
+	int							prev;
+	int							min = INT_MAX;
+
+	this->_list.sort();
+	prev = *it;
+	it++;
+	for (it = this->_list.begin(); it != this->_list.end(); it++) {
+		min = std::min(min, *it - prev);
+		prev = *it;
+	}
+	return min;
 }
 
-// template <typename T>
-// void	Span::addNumberRange(typename T::iterator & begin,
-// 						typename T::iterator & end)
-// {
-// 	unsigned int	distance = std::abs(std::distance(begin, end));
-	
-// 	if (distance > (this->_maxSize - this->_range.size()))
-// 		throw (Span::FullRangeException());
-// 	else if (distance != 0)
-// 		this->_range.insert(this->_range.end(), begin, end);
-// 	return ;
-// }
-
-const char *	Span::FullRangeException::what(void) const throw()
+unsigned int	Span::longestSpan(void)
 {
-	return ("Too many numbers in range.");
-}
-
-const char *	Span::RangeTooSmallException::what(void) const throw()
-{
-	return ("Too few elements in range to calculate span.");
-}
-
-std::ostream &	operator<<(std::ostream &os, Span &obj)
-{
-    for (std::vector<int>::const_iterator it = obj.getRange().begin();
-			it != obj.getRange().end(); ++it)
-		std::cout << "[" << *it << "] ";
-    return (os);
+	this->_list.sort();
+	return this->_list.front() - this->_list.back();
 }

@@ -1,5 +1,5 @@
-#ifndef A_CLASS_H
-# define A_CLASS_H
+#ifndef A_H
+# define A_H
 
 # include "Base.hpp"
 

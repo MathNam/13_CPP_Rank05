@@ -10,13 +10,8 @@ int	main(int ac, char ** av)
 		return (1);
 	}
 	
-	try {
-		std::cout << "---- Converting [" << av[1] << "]" << std::endl;
-		ScalarConverter	scalarConverter(av[1]);
-		std::cout << scalarConverter << std::endl;
-	}
-	catch(const std::exception& e) {
-		std::cout << "Input could not be converted: " << e.what() << std::endl;
-	}
+	std::cout << "---- Converting [" << av[1] << "]" << std::endl;
+	ScalarConverter::convert(av[1]);
+
 	return (0);
 }
