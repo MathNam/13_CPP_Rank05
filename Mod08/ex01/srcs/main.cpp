@@ -9,7 +9,7 @@ using std::endl;
 
 int	main(void)
 {
-	cout << endl << "===== Testing incomplete lists =====" << endl << endl;
+	cout << endl << "===== Testing incomplete lists =====" << endl;
 	{
 		try{
 			Span sp1 = Span(0);
@@ -26,7 +26,7 @@ int	main(void)
 			std::cerr << e.what() << endl;
 		}
 	}
-	cout << endl << "===== Testing full list =====" << endl << endl;
+	cout << endl << "===== Testing full list =====" << endl;
 	{
 		try{
 			Span sp3(3);
@@ -39,7 +39,7 @@ int	main(void)
 			std::cerr << e.what() << endl;
 		}
 	}
-	cout << endl << "===== Testing subject main =====" << endl << endl;
+	cout << endl << "===== Testing subject main =====" << endl;
 	{
 		Span sp = Span(5);
 		sp.addNumber(6);
@@ -50,14 +50,28 @@ int	main(void)
 		std::cout << sp.shortestSpan() << std::endl;
 		std::cout << sp.longestSpan() << std::endl;
 	}
-	cout << endl << "===== Testing iterator range =====" << endl << endl;
+	cout << endl << "===== Testing iterator range =====" << endl;
 	{
 		std::srand(time(0));
 		try {
-			std::list<int> range(10);
-			std::generate(range.begin(), range.end(), std::rand);
-			Span sp(range.size());
-			sp.addNumber(range.begin(), range.end());
+			std::list<int> list(10);
+			std::generate(list.begin(), list.end(), std::rand);
+			std::list<int> list2(list);
+			Span sp(list2.size());
+			sp.addNumber(list2);
+			cout << sp.shortestSpan() << std::endl;
+			cout << sp.longestSpan() << std::endl;
+		} catch (const std::exception &e) {
+			std::cerr << e.what() << endl;
+		}
+	}
+	cout << endl << "===== Testing arr range =====" << endl;
+	{
+		std::srand(time(0));
+		try {
+			int arr[6] = {-45, 0, 800, 15000, 6, -4846};
+			Span sp(6);
+			sp.addNumber(arr, 6);
 			cout << sp.shortestSpan() << std::endl;
 			cout << sp.longestSpan() << std::endl;
 		} catch (const std::exception &e) {

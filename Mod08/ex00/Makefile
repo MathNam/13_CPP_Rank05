@@ -164,8 +164,7 @@ clean:	where_c
 fclean:	clean
 		@rm -f $(NAME)
     	#-----Output-----#
-		@echo "▶ $(BRED)fclean $(RED)libft.a removed$(NC)"
-		@echo "▶ $(BRED)fclean $(RED)libmlx.a removed$(NC)"
+
 		@echo "\t$(RED)$(NAME) removed$(NC)"
 		@echo "--▶ $(BRED)fclean$(RED) done$(NC)"
 

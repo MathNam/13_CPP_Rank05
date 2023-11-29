@@ -4,7 +4,7 @@
 
 # Name
 
-PROJECT_NAME = adv_form
+PROJECT_NAME = mutantStack
 NAME	= ./$(PROJECT_NAME)
 
 #______________________________________________________________________________#
@@ -63,11 +63,7 @@ INC += -I $(INC_DIR)
 ############################### Headers ########################################
 #‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾#
 
-HEADER +=	Bureaucrat.hpp\
-			Form.hpp\
-			ShrubberyCreationForm.hpp\
-			RobotomyRequestForm.hpp\
-			PresidentialPardonForm.hpp
+HEADER += MutantStack.hpp
 
 vpath %.h $(INC_DIR)
 
@@ -81,12 +77,7 @@ SRCS_DIR += ./srcs
 ############################### Sources ########################################
 #‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾#
 
-SRCS +=	Bureaucrat.cpp\
-		AForm.cpp\
-		ShrubberyCreationForm.cpp\
-		RobotomyRequestForm.cpp\
-		PresidentialPardonForm.cpp\
-		main.cpp
+SRCS += main.cpp
 
 #______________________________________________________________________________#
 ############################### Attribution ####################################

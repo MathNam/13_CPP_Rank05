@@ -3,29 +3,22 @@
 
 Span::Span(void) :
 	_maxSize(0),
-	_list(_maxSize)
+	_list()
 {
 	return ;
 }
 
 Span::Span(unsigned int N) :
 	_maxSize(N),
-	_list(_maxSize)
-{
-	return ;
-}
+	_list()
+{}
 
 Span::Span(Span const & src) :
 	_maxSize(src._maxSize),
 	_list(src._list)
-{
-	return ;
-}
+{}
 
-Span::~Span(void)
-{
-	return ;
-}
+Span::~Span(void) {}
 
 const char * Span::tooManyElements::what(void) const throw()
 {
@@ -73,14 +66,16 @@ void	Span::addNumber(std::list<int> app)
 
 unsigned int	Span::shortestSpan(void)
 {
-	std::list<int>::iterator	it;
+	std::list<int>::iterator	it = this->_list.begin();
 	int							prev;
 	int							min = INT_MAX;
 
+	if (this->_list.size() < 2)
+		throw (noSpanCanBeFound());
 	this->_list.sort();
 	prev = *it;
 	it++;
-	for (it = this->_list.begin(); it != this->_list.end(); it++) {
+	for (; it != this->_list.end(); it++) {
 		min = std::min(min, *it - prev);
 		prev = *it;
 	}
@@ -89,6 +84,8 @@ unsigned int	Span::shortestSpan(void)
 
 unsigned int	Span::longestSpan(void)
 {
+	if (this->_list.size() < 2)
+		throw (noSpanCanBeFound());
 	this->_list.sort();
-	return this->_list.front() - this->_list.back();
+	return (this->_list.back() - this->_list.front());
 }
