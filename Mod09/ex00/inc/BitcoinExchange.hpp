@@ -20,28 +20,31 @@ class BitcoinExchange {
 public:
 	BitcoinExchange();
 	BitcoinExchange(BitcoinExchange const & cpy);
-	BitcoinExchange& operator=(BitcointExchange const & rhs); 
+	BitcoinExchange& operator=(BitcoinExchange const & rhs); 
 	~BitcoinExchange();
 
 	void	fillData(std::string dataFile);
-	void	processFile(std::string dataFile);
+	void 	processFile(std::ifstream& inputIfs);
+
 private:
 	class invalidFormat : public std::exception {
 		public:
 			virtual const char* what(void) const throw();
-	}
-	class invalidDateFormat : public std::exception {
+	};
+	class invalidDate : public std::exception {
 		public:
 			virtual const char* what(void) const throw();
-	}
-	class invalidValue : public std::exception {
+	};
+	class invalidValueNegative : public std::exception {
 		public:
 			virtual const char* what(void) const throw();
-	}
+	};
+	class invalidValueTooLarge : public std::exception {
+		public:
+			virtual const char* what(void) const throw();
+	};
 
-	std::map _btcPrices<std::string, double>;
-
-	void	lineFormatError();
-}
+	std::map<std::string, double> _btcPrices;
+};
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maaliber <maaliber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matnam <matnam@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:53:11 by mcombeau          #+#    #+#             */
-/*   Updated: 2023/11/30 15:14:05 by maaliber         ###   ########.fr       */
+/*   Updated: 2023/12/01 15:12:40 by matnam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ int	main(int ac, char *av[])
 	std::ifstream ifs(av[1]);
 	if (!ifs.is_open())
 		std::cout << "Invalid file name." << std::endl;
-	
-	std::string line;
-	while (getline(ifs, line)) {
-		
-	}
+
+	BitcoinExchange btc;
+	btc.fillData(av[1]);
+	btc.processFile(ifs);
+	return 0;
 }
