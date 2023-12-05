@@ -3,36 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcombeau <mcombeau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maaliber <maaliber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:48:56 by mcombeau          #+#    #+#             */
-/*   Updated: 2023/04/25 12:48:56 by mcombeau         ###   ########.fr       */
+/*   Updated: 2023/12/05 13:49:03 by maaliber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "RPN.hpp"
 
-int	main( int ac, char **av )
+int	main(int ac, char *av[])
 {
-	if ( ac != 2 )
-	{
-		std::cerr << RED "Usage: ./RPN [reverse Polish notation expression]" RESET <<
-		          std::endl;
-		return ( 1 );
+	if (ac != 2) {
+		std::cerr << "Usage: ./RPN [reverse Polish notation expression]" << std::endl;
+		return (1);
 	}
-	try
-	{
-		RPN rpn( ( std::string( av[1] ) ) );
-		int res = rpn.getResult();
-		if ( VERBOSE )
-		{
-			std::cout << YELLOW << "Result: " RESET;
-		}
+	try {
+		int res = RPN::calculate(av[1]);
 		std::cout << res << std::endl;
 	}
-	catch ( std::exception & e )
-	{
-		std::cerr << RED "Error: " << e.what() << RESET << std::endl;
+	catch (std::exception & e) {
+		std::cerr << "Error: " << e.what() << std::endl;
 	}
 	return ( 0 );
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RPN.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcombeau <mcombeau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maaliber <maaliber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:50:38 by mcombeau          #+#    #+#             */
-/*   Updated: 2023/04/25 12:50:38 by mcombeau         ###   ########.fr       */
+/*   Updated: 2023/12/05 13:52:32 by maaliber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,46 +25,23 @@
 #include <stdexcept>
 #include <string>
 
-#define VERBOSE 1
+class RPN {
+public:
+	std::stack<int> _stack;
+	int calculate( void );
 
-class RPN
-{
-	private:
-		std::stack<int> _calculator;
+private:
+	class EndOfInputException : public std::exception {
+		public:
+			virtual const char * what( void ) const throw();
+	};
 
-		void _calculate( std::string & input );
-		std::string _getNextElement( std::string & input );
-		void _handleElement( std::string & element );
-		void _handleOperand( std::string & element );
-		void _handleOperator( std::string & element );
-		int _getNextOperand( void );
-		int _calculateResult( std::string & operation, int first, int second );
-		int _handleDivision( int first, int second );
+	RPN(void);
+	RPN & operator=( RPN & src );
+	RPN(RPN&	src);
+	~RPN();
 
-		bool _isOperand( std::string & string ) const;
-		bool _isOperator( std::string & string ) const;
-
-		void _checkInput( std::string & input );
-		void _checkCalculatorValidity( void );
-
-		std::string _getCalculatorContentsAsString( void );
-
-		RPN( void );
-
-	public:
-		RPN( std::string input );
-		RPN( RPN & src );
-		~RPN( void );
-
-		RPN & operator=( RPN & src );
-
-		int getResult( void );
-
-		class EndOfInputException : public std::exception
-		{
-			public:
-				virtual const char * what( void ) const throw();
-		};
+	_checkStack();
 };
 
 #endif

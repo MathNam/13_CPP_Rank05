@@ -3,113 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   RPN.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcombeau <mcombeau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maaliber <maaliber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:49:05 by mcombeau          #+#    #+#             */
-/*   Updated: 2023/04/25 12:49:05 by mcombeau         ###   ########.fr       */
+/*   Updated: 2023/12/05 14:54:43 by maaliber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "RPN.hpp"
 #include <sstream>
 
-RPN::RPN( void ) {}
+/*Constructor & Destructors*/
 
-RPN::RPN( std::string input )
+RPN::RPN() {}
+
+RPN::RPN(RPN & src)
 {
-	_checkInput( input );
-	_calculate( input );
+	this->_stack = src._stack;
 }
 
-RPN::RPN( RPN & src )
+RPN::~RPN(void) {}
+
+RPN& RPN::operator=(RPN & src)
 {
-	this->_calculator = src._calculator;
+	this->_stack = src._stack;
+	return (*this);
 }
 
-RPN::~RPN( void ) {}
+/*Static*/
 
-RPN & RPN::operator=( RPN & src )
+static bool	isOperand(std::string & str)
 {
-	this->_calculator = src._calculator;
-	return ( *this );
+	if (str.length() != 1)
+		return false;
+	std::string	allowedChar = "0123456789";
+	if (allowedChar.find("str") == str::string::npos)
+		return false;
+	return true;
 }
 
-int RPN::getResult( void )
+static bool isOperator(std::string & str)
 {
-	_checkCalculatorValidity();
-	return ( _calculator.top() );
+	if (str.length() != 1)
+		return false;
+	std::string	allowedChar = "+-8\\";
+	if (allowedChar.find("str") == str::string::npos)
+		return false;
+	return true;
 }
 
-void RPN::_calculate( std::string & input )
-{
-	if ( VERBOSE )
-	{
-		std::cout << YELLOW "  Oper\t:\tCalculator Stack" RESET << std::endl;
-	}
-	while ( 1 )
-	{
-		try
-		{
-			std::string elem = _getNextElement( input );
-			_handleElement( elem );
-		}
-		catch ( RPN::EndOfInputException & e )
-		{
-			break;
-		}
-	}
-}
-
-void RPN::_handleElement( std::string & element )
-{
-	if ( VERBOSE )
-	{
-		std::cout << CYAN << "  " << element << "\t:\t";
-	}
-	if ( _isOperator( element ) )
-	{
-		_handleOperator( element );
-	}
-	else if ( _isOperand( element ) )
-	{
-		_handleOperand( element );
-	}
-	if ( VERBOSE )
-	{
-		std::cout << _getCalculatorContentsAsString() << RESET << std::endl;
-	}
-}
-
-void RPN::_handleOperand( std::string & element )
-{
-	int operand = std::atoi( element.c_str() );
-	_calculator.push( operand );
-}
-
-void RPN::_handleOperator( std::string & element )
-{
-	int second = _getNextOperand();
-	int first = _getNextOperand();
-	int res = _calculateResult( element, first, second );
-	_calculator.push( res );
-}
-
-int RPN::_getNextOperand( void )
-{
-	if ( _calculator.empty() )
-	{
-		throw ( std::out_of_range( "invalid input: missing operands for operator" ) );
-	}
-	int operand = _calculator.top();
-	_calculator.pop();
-	return ( operand );
-}
-
-int RPN::_calculateResult( std::string & operation, int first, int second )
+static int	singleOp(std::string & operation, int x, int y)
 {
 	int res = 0;
-	switch ( operation[0] )
-	{
+	switch (operation[0]) {
 		case '+':
 			res = first + second;
 			break;
@@ -120,7 +66,9 @@ int RPN::_calculateResult( std::string & operation, int first, int second )
 			res = first * second;
 			break;
 		case '/':
-			res = _handleDivision( first, second );
+			if ( second == 0 )
+				throw (std::runtime_error("Division by 0"));
+			res = first / second;
 			break;
 		default:
 			throw ( std::runtime_error( operation + ": invalid operator !" ) );
@@ -128,39 +76,52 @@ int RPN::_calculateResult( std::string & operation, int first, int second )
 	return ( res );
 }
 
-int RPN::_handleDivision( int first, int second )
+
+/*Private*/
+
+void RPN::addToStack(std::string & token)
 {
-	if ( second == 0 )
-	{
-		std::stringstream ss;
-		ss << first << " " << second << " /" << ": Illegal operation: cannot divide by 0!";
-		throw ( std::runtime_error( ss.str() ) );
-	}
-	return ( first / second );
+	int n = std::stoi(token);
+	_stack.push(n);
 }
 
-bool RPN::_isOperand( std::string & string ) const
+void RPN::operation(std::string & token)
 {
-	std::string::iterator it = string.begin();
-	for ( ; it != string.end(); it++ )
-	{
-		if ( it != string.begin() && !std::isdigit( *it ) )
-		{
-			return ( false );
+	if (_stack.size() < 2)
+		throw (std::runtime_error( "invalid input: missing operands for operator" ));
+	int x = _stack.top();
+	_stack.pop();
+	int y = _stack.top();
+	_stack.pop();
+	int res = singleOp(token, first, second);
+	_stack.push(res);
+}
+
+/*Public*/
+
+int RPN::calculate( std::string & input )
+{
+	stringstream ss(input);
+	string	token;
+
+	while (1) {
+		try {
+			ss >> token;
+			checkInput(token);
+			if (isOperator(token))
+				operation(token);
+			else if(isOperand(token))
+				addToStack(token);
+			else
+				throw (std::runtime_error("invalid character in input."))
+			if (!ss.eof()) {
+			
+			}
+		}
+		catch (std::exception & e) {
+			std::cerr << "Error: " << e.what() << std::endl;
 		}
 	}
-	return ( true );
-}
-
-bool RPN::_isOperator( std::string & string ) const
-{
-	std::string operators = "+-*/";
-	size_t pos = string.find_first_not_of( operators, 0 );
-	if ( pos == std::string::npos && string.length() == 1 )
-	{
-		return ( true );
-	}
-	return ( false );
 }
 
 std::string RPN::_getNextElement( std::string & input )
@@ -169,9 +130,7 @@ std::string RPN::_getNextElement( std::string & input )
 	for ( ; it != input.end(); it++ )
 	{
 		if ( *it == ' ' )
-		{
 			continue;
-		}
 		std::string elem = std::string( 1, *it );
 		it++;
 		return ( elem );
@@ -179,54 +138,25 @@ std::string RPN::_getNextElement( std::string & input )
 	throw ( RPN::EndOfInputException() );
 }
 
-void RPN::_checkInput( std::string & input )
+void RPN::_checkStack( void )
 {
-	std::string requiredDigits = "0123456789";
-	std::string requiredOperators = "+-*/";
-	std::string allowed = requiredDigits + requiredOperators + " ";
-
-	size_t pos = input.find_first_not_of( allowed, 0 );
-	if ( pos != std::string::npos )
-	{
-		throw ( std::out_of_range ( "invalid input: can only contain " + allowed ) );
+	if ( _calculator.size() != 1 ) {
+		throw (std::out_of_range( "invalid input: missing operator(s)" ));
 	}
-	pos = input.find_first_of( requiredDigits, 0 );
-	if ( pos == std::string::npos )
-	{
-		throw ( std::out_of_range ( "invalid input: requires at least one of " +
-		                            requiredDigits ) );
-	}
-	pos = input.find_first_of( requiredOperators, 0 );
-	if ( pos == std::string::npos )
-	{
-		throw ( std::out_of_range ( "invalid input: requires at least one of " +
-		                            requiredOperators ) );
-	}
-}
-
-void RPN::_checkCalculatorValidity( void )
-{
-	if ( _calculator.size() != 1 )
-	{
-		throw ( std::out_of_range( "invalid input: missing operator(s)" ) );
-	}
-}
-
-std::string RPN::_getCalculatorContentsAsString( void )
-{
-	std::stringstream contents;
-	std::stack<int> copy = _calculator;
-
-	while ( !copy.empty() )
-	{
-		int nb = copy.top();
-		copy.pop();
-		contents << "[" << nb << "]";
-	}
-	return ( contents.str() );
 }
 
 const char * RPN::EndOfInputException::what( void ) const throw()
 {
 	return ( "end of input" );
 }
+
+const char * RPN::EndOfInputException::what( void ) const throw()
+{
+	return ( "end of input" );
+}
+
+const char * RPN::EndOfInputException::what( void ) const throw()
+{
+	return ( "end of input" );
+}
+
