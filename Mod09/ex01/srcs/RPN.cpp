@@ -6,7 +6,7 @@
 /*   By: maaliber <maaliber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:49:05 by mcombeau          #+#    #+#             */
-/*   Updated: 2023/12/05 14:54:43 by maaliber         ###   ########.fr       */
+/*   Updated: 2023/12/06 14:16:12 by maaliber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static bool	isOperand(std::string & str)
 	if (str.length() != 1)
 		return false;
 	std::string	allowedChar = "0123456789";
-	if (allowedChar.find("str") == str::string::npos)
+	if (allowedChar.find(str) == std::string::npos)
 		return false;
 	return true;
 }
@@ -46,8 +46,8 @@ static bool isOperator(std::string & str)
 {
 	if (str.length() != 1)
 		return false;
-	std::string	allowedChar = "+-8\\";
-	if (allowedChar.find("str") == str::string::npos)
+	std::string	allowedChar = "+-*/";
+	if (allowedChar.find(str) == std::string::npos)
 		return false;
 	return true;
 }
@@ -57,106 +57,69 @@ static int	singleOp(std::string & operation, int x, int y)
 	int res = 0;
 	switch (operation[0]) {
 		case '+':
-			res = first + second;
+			res = x + y;
 			break;
 		case '-':
-			res = first - second;
+			res = x - y;
 			break;
 		case '*':
-			res = first * second;
+			res = x * y;
 			break;
 		case '/':
-			if ( second == 0 )
+			if ( y == 0 )
 				throw (std::runtime_error("Division by 0"));
-			res = first / second;
+			res = x / y;
 			break;
 		default:
-			throw ( std::runtime_error( operation + ": invalid operator !" ) );
+			throw (std::runtime_error(""));
 	}
-	return ( res );
+	return (res);
 }
 
 
 /*Private*/
 
-void RPN::addToStack(std::string & token)
+void	RPN::addToStack(std::string & token)
 {
-	int n = std::stoi(token);
+	char* pEnd;
+	
+	int n = std::strtol(token.c_str(), &pEnd, 10);
 	_stack.push(n);
 }
 
-void RPN::operation(std::string & token)
+void	RPN::operation(std::string & token)
 {
 	if (_stack.size() < 2)
-		throw (std::runtime_error( "invalid input: missing operands for operator" ));
-	int x = _stack.top();
-	_stack.pop();
+		throw (std::runtime_error( "invalid input: invalid sequence, missing operands for operator" ));
 	int y = _stack.top();
 	_stack.pop();
-	int res = singleOp(token, first, second);
+	int x = _stack.top();
+	_stack.pop();
+	int res = singleOp(token, x, y);
 	_stack.push(res);
 }
 
 /*Public*/
 
-int RPN::calculate( std::string & input )
+int RPN::calculate(std::string & input)
 {
-	stringstream ss(input);
-	string	token;
+	std::stringstream ss(input);
+	std::string	token;
 
 	while (1) {
-		try {
-			ss >> token;
-			checkInput(token);
-			if (isOperator(token))
-				operation(token);
-			else if(isOperand(token))
-				addToStack(token);
-			else
-				throw (std::runtime_error("invalid character in input."))
-			if (!ss.eof()) {
-			
-			}
-		}
-		catch (std::exception & e) {
-			std::cerr << "Error: " << e.what() << std::endl;
-		}
+		ss >> token;
+		if (isOperator(token))
+			operation(token);
+		else if(isOperand(token))
+			addToStack(token);
+		else
+			throw (std::runtime_error("invalid character in input."));
+		if (ss.eof()) {
+			if (_stack.size() > 1)
+				throw (std::runtime_error("invalid input: missing operators for operands."));
+			if (_stack.size() == 0)
+				throw (std::runtime_error("invalid input: missing operands for operator."));
+			return (_stack.top());
+		}	
 	}
 }
-
-std::string RPN::_getNextElement( std::string & input )
-{
-	static std::string::iterator it = input.begin();
-	for ( ; it != input.end(); it++ )
-	{
-		if ( *it == ' ' )
-			continue;
-		std::string elem = std::string( 1, *it );
-		it++;
-		return ( elem );
-	}
-	throw ( RPN::EndOfInputException() );
-}
-
-void RPN::_checkStack( void )
-{
-	if ( _calculator.size() != 1 ) {
-		throw (std::out_of_range( "invalid input: missing operator(s)" ));
-	}
-}
-
-const char * RPN::EndOfInputException::what( void ) const throw()
-{
-	return ( "end of input" );
-}
-
-const char * RPN::EndOfInputException::what( void ) const throw()
-{
-	return ( "end of input" );
-}
-
-const char * RPN::EndOfInputException::what( void ) const throw()
-{
-	return ( "end of input" );
-}
-

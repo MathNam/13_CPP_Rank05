@@ -6,7 +6,7 @@
 /*   By: maaliber <maaliber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 12:48:56 by mcombeau          #+#    #+#             */
-/*   Updated: 2023/12/05 13:49:03 by maaliber         ###   ########.fr       */
+/*   Updated: 2023/12/06 10:29:33 by maaliber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ int	main(int ac, char *av[])
 		return (1);
 	}
 	try {
-		int res = RPN::calculate(av[1]);
+		RPN rpn;
+		std::string	str = av[1];
+		int res = rpn.calculate(str);
 		std::cout << res << std::endl;
 	}
 	catch (std::exception & e) {

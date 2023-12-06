@@ -2,19 +2,15 @@
 #define BITCOIN_EXCHANGE_HPP
 
 #include <cstdlib>
-#include <ctime>
 #include <exception>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <limits>
 #include <map>
 #include <cctype>
+#include <stddef.h>
 #include <sstream>
-#include <stdexcept>
 #include <string>
-#include <strings.h>
-#include <sys/stat.h>
 
 class BitcoinExchange {
 public:
@@ -24,7 +20,8 @@ public:
 	~BitcoinExchange();
 
 	void	fillData(std::string dataFile);
-	void 	processFile(std::ifstream& inputIfs);
+	double	findPrice(std::string const & date);
+	void 	processFile(char* inputFileName);
 
 private:
 	class invalidFormat : public std::exception {
@@ -35,11 +32,15 @@ private:
 		public:
 			virtual const char* what(void) const throw();
 	};
-	class invalidValueNegative : public std::exception {
+	class qtyNegative : public std::exception {
 		public:
 			virtual const char* what(void) const throw();
 	};
-	class invalidValueTooLarge : public std::exception {
+	class qtyTooLarge : public std::exception {
+		public:
+			virtual const char* what(void) const throw();
+	};
+	class dataFileCorrupted : public std::exception {
 		public:
 			virtual const char* what(void) const throw();
 	};
