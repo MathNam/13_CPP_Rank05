@@ -1,36 +1,49 @@
-#ifndef PMERGEME_HPP
-# define PMERGEME_HPP
+#pragma once
 
-# include <cstdlib>
-# include <exception>
-# include <fstream>
-# include <iomanip>
-# include <iostream>
-# include <map>
-# include <cctype>
-# include <stddef.h>
-# include <sstream>
-# include <string>
-# include <vector>
-# include <deque>
-# include <iterator>
+#include <iostream>
+#include <vector>
+#include <deque>
+#include <ctime>
+#include <iomanip>
+#include <sstream>
 
-template < template <typename> class RAContainer >
+/* Type definitions */
+typedef std::vector<int> int_vector;
+
+/* Class definition */
+template<typename Container>
 class PmergeMe {
-public:
-	PmergeMe();
-	PmergeMe(PmergeMe const & src);
-	~PmergeMe();
-	PmergeMe & operator=(PmergeMe const & rhs);
 
-	void	sort(std::string const & str);
+public:
+	typedef typename Container::value_type      value_type;
+	typedef typename Container::size_type       size_type;
+	typedef std::pair <value_type, value_type>  type_pair;
+	typedef std::vector <type_pair>             pair_vector;
+
+	PmergeMe();
+	PmergeMe(const PmergeMe &other);
+	PmergeMe &operator=(const PmergeMe &other);
+	PmergeMe(char **data);
+	
+
+	~PmergeMe();
+
+	void sort();
+	void print_data() const;
+	void benchmark() const;
 
 private:
-	size_t				_size;
-	RAContainer<int>	_cont;
+	Container   _data;
+	value_type  _last;
+	double      _time;
 
-	bool 					validateInput(std::string str);
-	// void					mergeInsertionSort(RAIterator first, RAIterator last);
+	int_vector  generate_indexes(size_t n);
+	pair_vector generate_pairs(Container &data);
+	void        sort_pairs(pair_vector &pairs);
+	int         binary_search(int target);
+	int         ft_stoa(const char *str);
+	bool        is_number(const std::string& s);
+
 };
 
 // template<typename RAIterator>
