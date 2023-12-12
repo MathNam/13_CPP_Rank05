@@ -31,14 +31,15 @@ public:
 
 	void	sort();
 	void	print_data() const;
+	void	print_sortedData() const;
 	void	benchmark() const;
 
 private:
 	Container< int, std::allocator<int> >	_data;
+	Container< int, std::allocator<int> >	_sortedData;
 	
 	int		_last;
 	double	_time;
 
 	int		binarySearch(int max_idx, int n);
-	void	move(int oldIndex, int newIndex);
 };
