@@ -1,5 +1,5 @@
 #include "PmergeMe.hpp"
-#include <iostream>
+#include <algorithm>
 
 /*Static functions*/
 template <template <typename, typename> class Container>
@@ -107,8 +107,25 @@ void	PmergeMe<Container>::print_sortedData() const
 }
 
 template <template <typename, typename> class Container>
+bool	PmergeMe<Container>::is_sorted() const
+{
+	for (size_t i = 0; i < _sortedData.size() - 1; i++) {
+		if (_sortedData[i] > _sortedData[i + 1])
+		{
+			std::cout << _sortedData[i] << " > " << _sortedData[i + 1] << std::endl;
+			return false;
+		}
+	}
+	return true;
+}
+
+template <template <typename, typename> class Container>
 void	PmergeMe<Container>::benchmark() const
 {
+	if (is_sorted())
+		std::cout << "Sorted!" << std::endl;
+	else
+		std::cout << "Not sorted!" << std::endl;
 	std::cout
 			<<	"Time to process a range of " << _data.size()
 			<< " elements with std::" << ::getContainerName<Container>()
@@ -121,16 +138,19 @@ void PmergeMe<Container>::sort()
 {
 	
 	std::clock_t start = std::clock();
+/*------------------------------------------------------------
+	Store stray element
+------------------------------------------------------------*/
+	{
+		int size = std::distance(_data.begin(), _data.end());
+		if (std::distance(_data.begin(), _data.end()) < 2)
+			return;
 
-	int size = std::distance(_data.begin(), _data.end());
-	if (size < 2)
-		return;
-
-	bool has_stray = (size % 2 != 0);
-	if (has_stray) {
-		_last = _data.back();
-		_data.pop_back();
-		--size;
+		bool has_stray = (size % 2 != 0);
+		if (has_stray) {
+			_last = _data.back();
+			_data.erase(_data.end() - 1);
+		}
 	}
 
 /*------------------------------------------------------------
@@ -138,7 +158,7 @@ void PmergeMe<Container>::sort()
 ------------------------------------------------------------*/
 	{
 		typename Container< int, std::allocator<int> >::iterator it = _data.begin();
-		for (; it != end ; it += 2) {
+		for (; it != _data.end() ; it += 2) {
 			if (it[1] < it[0]) {
 				std::iter_swap(it, it + 1);
 			}
@@ -151,9 +171,9 @@ void PmergeMe<Container>::sort()
 	{
 		typename Container< int, std::allocator<int> >::iterator it1 = _data.begin();
 		typename Container< int, std::allocator<int> >::iterator it2;
-		for (; it1 != end ; it1 += 2) {
+		for (; it1 != _data.end() ; it1 += 2) {
 			typename Container< int, std::allocator<int> >::iterator itMin = it1;
-			for (it2 = it1 + 2; it2 != end ; it2 += 2) {
+			for (it2 = it1 + 2; it2 != _data.end() ; it2 += 2) {
 				if (it2[1] < itMin[1])
 					itMin = it2;
 			}
@@ -162,17 +182,26 @@ void PmergeMe<Container>::sort()
 				std::iter_swap(it1 + 1, itMin + 1);
 			}
 		}
-		print_data();
 
-		_sortedData.push_back(*it);
-		_data.pop_front();
+		/*Push first element*/
+		if (!_data.empty())
+			_sortedData.push_back(*_data.begin());
+				
+		typename Container< int, std::allocator<int> >::iterator it = _data.begin() + 1;
 
-		typename Container< int, std::allocator<int> >::iterator it = _data.begin();
-		for (; it != end; it += 2) {
-			_sortedData.push_back(*it);
+		/*Push the highest element of all pairs*/
+		for (int index = 1; it != _data.end(); ++it, ++index) {
+			if (index % 2 == 1) {  // Even-indexed element
+				_sortedData.push_back(*it);
+			}
 		}
-		// print_data();
-		print_sortedData();
+
+		size_t writeIndex = 0;
+
+		for (size_t i = 2; i < _data.size(); i += 2) {
+			_data[writeIndex++] = _data[i];
+		}
+		_data.resize(writeIndex);
 	}
 
 	int	jacobsthalIdxArr[] ={2, 2, 6, 10, 22, 42, 86, 170, 342, 682, 1366, 2730, 5462, 10922, 21846, 43690, 87382, 174762, 349526, 699050, 1398102, 2796202, 5592406, 11184810, 22369622};
@@ -181,26 +210,22 @@ void PmergeMe<Container>::sort()
 	Merge lowest elements of pairs (Binary search)
 ------------------------------------------------------------*/
 	{
-		int idx_jacobsthal = std::lower_bound(jacobsthalIdx.begin(), jacobsthalIdx.end(), size)[0];
-		int i = 1;
+		// print_sortedData();
+		int idx_jacobsthal = std::lower_bound(jacobsthalIdx.begin(), jacobsthalIdx.end(), _data.size())[0];
+		int i = 0;
+		int search_idx = 2;
 		while (jacobsthalIdx[i] <= idx_jacobsthal) {
-			int idx_max = std::min(jacobsthalIdx[i], size - 1);
-			typename Container< int, std::allocator<int> >::reverse_iterator rit = _data.rend() - idx_max - 1;
-			for (; _data.rend() - rit > 2; rit += 2) {
-				int old_idx = _data.rend() - rit - 1;
-				int idx = binarySearch(idx_max, *rit);
-				if (idx < old_idx) {
-					std::rotate(rit, rit + 1, _data.rend() - idx);
-					--rit;
-				}
+			if (_data.empty())
+				break;
+			int idx_max = std::min(jacobsthalIdx[i], static_cast<int>(_data.size()));
+			search_idx += idx_max;
+			typename Container< int, std::allocator<int> >::reverse_iterator rit = _data.rend() - idx_max;
+			for (; rit != _data.rend(); ++rit) {
+				int idx = binarySearch(search_idx, *rit);
+				_sortedData.insert(_sortedData.begin() + idx, *rit);
+				search_idx++;
 			}
-			// typename Container< int, std::allocator<int> >::iterator it = _data.begin();
-			// for (; it != _data.begin() + idx_max/2; it++) {
-			// 	if (*it > *(it+1)) {
-			// 		print_data();
-			// 		std::cout << *it << " > " << *(it + 1) << std::endl;
-			// 	}
-			// }
+			_data.erase(_data.begin(), _data.begin() + idx_max);
 			i++;
 		}
 	}
@@ -209,10 +234,14 @@ void PmergeMe<Container>::sort()
 	Insert stray element
 ------------------------------------------------------------*/
 
-	if (has_stray) {
-		int idx = binarySearch(size, _data[size]);
-		if (idx < size)
-			std::rotate(_data.rbegin(), _data.rbegin() + 1, _data.rend() - idx);
+	int size = std::distance(_sortedData.begin(), _sortedData.end());
+	if (_last != -1) {
+		if (_last > _sortedData[size - 1])
+			_sortedData.push_back(_last);
+		else {
+			int idx = binarySearch(size, _last);
+			_sortedData.insert(_sortedData.begin() + idx, _last);
+		}	
 	}
 
 	_time = static_cast<double>(std::clock() - start) / CLOCKS_PER_SEC;
@@ -221,17 +250,14 @@ void PmergeMe<Container>::sort()
 template <template <typename, typename> class Container>
 int		PmergeMe<Container>::binarySearch(int max_idx, int n)
 {
-	if (n <= _data[0])
-		return 0;
-
 	int	left = 0;
-	int	right = max_idx - 2;
+	int	right = max_idx - 1;
 	while (left <= right) {
 		int	mid = left + (right - left) / 2;
 
-		if (_data[mid] == n)
+		if (_sortedData[mid] == n)
 			return mid + 1;
-		if (_data[mid] < n)
+		if (_sortedData[mid] < n)
 			left = mid + 1;
 		else
 			right = mid - 1;

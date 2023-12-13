@@ -11,16 +11,11 @@
 #include <algorithm>
 #include <cstddef>
 
-/* Type definitions */
-typedef std::vector<int> int_vector;
-
 /* Class definition */
 template <template <typename, typename> class Container>
 class PmergeMe {
 
 public:
-	typedef typename std::vector< int, std::allocator<int> >::iterator iterator;
-	typedef typename std::vector< int, std::allocator<int> >::const_iterator const_iterator;
 
 	PmergeMe();
 	PmergeMe(const PmergeMe &cpy);
@@ -41,5 +36,6 @@ private:
 	int		_last;
 	double	_time;
 
+	bool	is_sorted() const;
 	int		binarySearch(int max_idx, int n);
 };
