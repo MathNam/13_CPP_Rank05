@@ -23,7 +23,7 @@ const char* BitcoinExchange::invalidFormat::what(void) const throw() {
 }
 
 const char* BitcoinExchange::invalidDate::what(void) const throw() {
-	return "bad input";
+	return "invalid date";
 }
 
 const char* BitcoinExchange::qtyNegative::what(void) const throw() {
@@ -56,7 +56,12 @@ void	BitcoinExchange::fillData(std::string dataFile)
 		if (limPos != 10)
 			throw dataFileCorrupted();
 		date = line.substr(0, limPos);
-		value = std::strtod(line.substr(limPos + 1, line.length()).c_str(), NULL);
+
+		std::string			rate = line.substr(limPos + 1, line.length() - limPos - 1);
+		std::istringstream	iss(rate);
+
+		if (!(iss >> value) || !iss.eof() || value < 0) 
+			throw dataFileCorrupted();
 		this->_btcPrices[date] = value;
 	}
 }
@@ -90,7 +95,7 @@ static bool	validDate(std::string const & date)
 			return false;}
 		if (!(day >= 1 && day <= lookup_table[month-1])){
 			return false;}
-		if (!(year >= 1900)){
+		if (!(year >= 0)){
 			return false;}
 	}
 	catch (std::exception & e) {
@@ -102,12 +107,14 @@ static bool	validDate(std::string const & date)
 double	BitcoinExchange::findPrice(std::string const & date)
 {
 	std::map<std::string, double>::iterator it = _btcPrices.begin();
+	if (it->first > date)
+		throw invalidDate();
 	while (it != _btcPrices.end()) {
 		if (it->first >= date)
 			return (--it)->second;
 		it++;
 	}
-	return 0;
+	return (--it)->second;
 }
 
 void	BitcoinExchange::processFile(char* inputFileName)
@@ -140,8 +147,10 @@ void	BitcoinExchange::processFile(char* inputFileName)
 
 			price = findPrice(date);
 
-			sQty = line.substr(limPos + 3, line.length() - limPos + 3);
-			qty = std::strtod(sQty.c_str(), NULL);
+			sQty = line.substr(limPos + 3, line.length() - limPos - 3);
+			std::istringstream	iss(sQty);
+			if (!(iss >> qty) || !iss.eof() || qty < 0)
+				throw invalidFormat();
 			if (qty < 0)
 				throw qtyNegative();
 			if (qty > 1000)
@@ -149,7 +158,7 @@ void	BitcoinExchange::processFile(char* inputFileName)
 			std::cout << date << " => " << qty << " = " << qty * price << std::endl;
 		}
 		catch (invalidDate & e) {
-			std::cout << "Error: " << e.what() << " => " << date << "." << std::endl;
+			std::cout << "Error: " << e.what() << " [" << date << "]" << std::endl;
 		}
 		catch (std::exception & e) {
 			std::cout << "Error: " << e.what() << "." << std::endl;

@@ -136,8 +136,12 @@ void	PmergeMe<Container>::benchmark() const
 template <template <typename, typename> class Container>
 void PmergeMe<Container>::sort()
 {
-	
 	std::clock_t start = std::clock();
+	if (_data.size() < 2) {
+		_sortedData = _data;
+		_time = static_cast<double>(std::clock() - start) / CLOCKS_PER_SEC;
+		return;
+	}
 /*------------------------------------------------------------
 	Store stray element
 ------------------------------------------------------------*/
