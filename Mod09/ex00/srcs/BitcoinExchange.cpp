@@ -64,6 +64,8 @@ void	BitcoinExchange::fillData(std::string dataFile)
 			throw dataFileCorrupted();
 		this->_btcPrices[date] = value;
 	}
+	if (this->_btcPrices.empty())
+		throw dataFileCorrupted();
 }
 
 static bool	is_number(const std::string& s)
